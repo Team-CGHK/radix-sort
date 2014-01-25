@@ -10,7 +10,7 @@ namespace RadixSort
     class Program
     {
         private const int N = 1000;
-        private const int digits = 6;
+        private const int digits = 8;
 
         static void Main(string[] args)
         {
@@ -24,35 +24,38 @@ namespace RadixSort
             Console.ReadKey();
         }
 
-        static void RadixSort(long[] data, int from, int count, int digit)
-        {
-            if (digit == -1)
-                return;
-          
-            List<long>[] currentRankItems = new List<long>[10];
-            for (int i = 0; i < currentRankItems.Length; ++i)
-                currentRankItems[i] = new List<long>();
-            for (int i = from; i < count; ++i)
-                currentRankItems[data[i] % Pow10[digit + 1] / Pow10[digit]].Add(data[i]);
-            for (int i = 0, pos = 0; i < currentRankItems.Length; ++i)
-                foreach (long l in currentRankItems[i])
-                    data[from + pos++] = l;
-            for (int i = 0, pos = 0; i < currentRankItems.Length; ++i)
-            {
-                RadixSort(data, pos, currentRankItems[i].Count, digit - 1);
-                pos += currentRankItems[i].Count;
-            }
-        }
-
+        static List<long>[] lists = new List<long>[10];
         private static readonly long[] Pow10 = new long[15];
 
         static Program()
         {
+            for (int i = 0; i < lists.Length; ++i)
+                lists[i] = new List<long>();
             //some pre-calculation to avoid multiplication during runtime
             long p = 1;
             Pow10[0] = 1;
             for (int i = 1; i < Pow10.Length; ++i)
                 Pow10[i] = p *= 10;
         }
+
+        static void RadixSort(long[] data, int from, int count, int digit)
+        {
+            if (digit == -1)
+                return;
+          for (int i = 0; i < lists.Length; ++i)
+                lists[i].Clear();
+            for (int i = from; i < count; ++i)
+                lists[data[i] % Pow10[digit + 1] / Pow10[digit]].Add(data[i]);
+            for (int i = 0, pos = 0; i < lists.Length; ++i)
+                foreach (long l in lists[i])
+                    data[from + pos++] = l;
+            for (int i = 0, pos = 0; i < lists.Length; ++i)
+            {
+                if (lists.Length > 0)
+                    RadixSort(data, pos, lists[i].Count, digit - 1);
+                pos += lists[i].Count;
+            }
+        }
+       
     }
 }
