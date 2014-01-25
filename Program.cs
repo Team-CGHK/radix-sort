@@ -10,7 +10,7 @@ namespace RadixSort
 {
     class Program
     {
-        private const int N = 1200000;
+        private const int N = 120000;
         private const int Length = 20;
 
         //let the strings consist of lowercase letters
@@ -28,7 +28,7 @@ namespace RadixSort
             for (int i = 0; i < N; ++i)
             {
                 for (int j = 0; j < Length; ++j)
-                    chars[j] = (char)(FirstChar + r.Next(26));
+                    chars[j] = (char)(FirstChar + r.Next(AlphabetSize));
                 data0[i] = data1[i] = new string(chars);
             }
 
