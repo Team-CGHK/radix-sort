@@ -10,7 +10,7 @@ namespace RadixSort
     class Program
     {
         private const int N = 1000;
-        private const int digits = 8;
+        private const int digits = 7;
 
         static void Main(string[] args)
         {
